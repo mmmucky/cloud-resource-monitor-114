@@ -9,6 +9,8 @@
 
 ## The Hardware
 
+The hardware is not overly complex.  It consists of one duinotech NANO V3.0 with a strip of 28 Adafruit Neopixels connected to Ground, 3.3V, and Data 7 Pins.  
+
 ![alt text](images/crm114.jpg "The CRM-114 Hardware")
 
 
