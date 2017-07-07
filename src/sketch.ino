@@ -41,6 +41,7 @@ int phy_pixel_map[28] = {0, 1, 2, 3, 8, 7, 6, 5, 4, 9, 10, 11, 12, 13, 14, 15, 2
 
 
 void setup() {
+  delay(1000);
   strip.begin();
   strip.show();
   Serial.begin(9600);
@@ -59,89 +60,91 @@ void loop() {
   d=0;
   strip.setBrightness(32);
 
-  for(j=0;j<20;j++) {
-    flash_arc(GREEN, 50);
-    delay(50);
-  }
-
-  for(j=0;j<20;j++) {
-    flash_arc(YELLOW, 50);
-    delay(50);
-  }
-
-  for(j=0;j<20;j++) {
-    flash_arc(RED, 50);
-    delay(50);
-  }
-
-  for(j=0;j<20;j++) {
-    flash_arc(BLUE, 50);
-    delay(50);
-  }
-
-  for(j=0;j<5;j++) {
-    pulse_rainbow(0, 3);
-  }
-
-
-// vu style grow right, shrink back to the left
-  for(j=0;j<5;j++) {
-    // left -> right sector
-    for (i=0;i<12;i++) {
-      sector(0,i, 1); delay(d);
-    }
-    // right -> left sector
-    for (i=12;i>=0;i--) {
-      sector(0,i, 1); delay(d);
-    }
-  }
-
-
-// clock-wise rotation
-  for(j=0;j<5;j++) {
-    for (i=0;i<=12;i++) {
-      sector(0,i, 1); delay(10);
-    }
-    delay(300);
-    for (i=0;i<12;i++) {
-      sector(i,12, 1); delay(10);
-    }
-  }
-
-//// initial brightness of each arc
-////  int arc_brightness[4] = {0, 85, 170, 255};
-  int arc_brightness[4] = {0, 25, 50, 255};
-  int arc_step_dir[4] = {1, 1, 1, 1};
-  int arc_step = 1;
-  int dir = 1;
-  for(j=0;j<8000;j++) {
-// adjust brightness differential after each iteration
-    if (arc_brightness[0] == 255) {
-      arc_step += dir;
-      if (arc_step > 32) {
-        arc_step = 32;
-        dir=-1;
+ if (Serial.available())
+  {
+    char ch = Serial.read();
+    if (ch == 'r')
+      for(j=0;j<20;j++) {
+        flash_arc(RED, 50);
+        delay(50);
       }
-      if (arc_step < 0) {
-        arc_step = 0;
-        dir=1;
+    if (ch == 'g')
+      for(j=0;j<20;j++) {
+        flash_arc(GREEN, 50);
+        delay(50);
       }
-    }
-
-    for(a=0;a<4;a++) {
-      arc(a, arc_brightness[a]);
-      arc_brightness[a]+= arc_step*arc_step_dir[a];
-      if(arc_brightness[a] >255) {
-        arc_brightness[a] = 255;
-        arc_step_dir[a] *= -1;
+    if (ch == 'y')
+      for(j=0;j<20;j++) {
+        flash_arc(YELLOW, 50);
+        delay(50);
       }
-      if(arc_brightness[a] < 0) {
-        arc_brightness[a] = 0;
-        arc_step_dir[a] *= -1;
+    if (ch == 'b')
+      for(j=0;j<20;j++) {
+        flash_arc(BLUE, 50);
+        delay(50);
       }
-    }
-    delay(5);
-  }
+  }   
+//  for(j=0;j<5;j++) {
+//    pulse_rainbow(0, 3);
+//  }
+//
+//
+//// vu style grow right, shrink back to the left
+//  for(j=0;j<5;j++) {
+//    // left -> right sector
+//    for (i=0;i<12;i++) {
+//      sector(0,i, 1); delay(d);
+//    }
+//    // right -> left sector
+//    for (i=12;i>=0;i--) {
+//      sector(0,i, 1); delay(d);
+//    }
+//  }
+//// clock-wise rotation
+//  for(j=0;j<5;j++) {
+//    for (i=0;i<=12;i++) {
+//      sector(0,i, 1); delay(10);
+//    }
+//    delay(300);
+//    for (i=0;i<12;i++) {
+//      sector(i,12, 1); delay(10);
+//    }
+//  }
+//
+////// initial brightness of each arc
+//////  int arc_brightness[4] = {0, 85, 170, 255};
+//  int arc_brightness[4] = {0, 25, 50, 255};
+//  int arc_step_dir[4] = {1, 1, 1, 1};
+//  int arc_step = 1;
+//  int dir = 1;
+//  for(j=0;j<8000;j++) {
+//// adjust brightness differential after each iteration
+//    if (arc_brightness[0] == 255) {
+//      arc_step += dir;
+//      if (arc_step > 32) {
+//        arc_step = 32;
+//        dir=-1;
+//      }
+//      if (arc_step < 0) {
+//        arc_step = 0;
+//        dir=1;
+//      }
+//    }
+//
+//    for(a=0;a<4;a++) {
+//      arc(a, arc_brightness[a]);
+//      arc_brightness[a]+= arc_step*arc_step_dir[a];
+//      if(arc_brightness[a] >255) {
+//        arc_brightness[a] = 255;
+//        arc_step_dir[a] *= -1;
+//      }
+//      if(arc_brightness[a] < 0) {
+//        arc_brightness[a] = 0;
+//        arc_step_dir[a] *= -1;
+//      }
+//    }
+//    delay(5);
+//  }
 }
 
 void flash_arc(int arc_num, int d) {
